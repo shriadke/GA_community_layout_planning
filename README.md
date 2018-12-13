@@ -6,4 +6,5 @@ enlarged to show nomenclature, and express the overall idea
 
 
 While GA generates similar to above with less accuracy
+
 ![SOLUTION BY GA](/best_grid_100_iter.PNG)
