@@ -110,12 +110,12 @@ def genetic_algorithm(grids, start_exit_dict):
     for i in range(grids.shape[0]):
         grid=grids[i,:,:]
         startList = start_exit_dict[i]
-        fitness_list.append((i, calculate_fitness(grid, startList)))
+        fitness_list.append((i, 1/calculate_fitness(grid, startList)))
     
-    fitness_list = sorted(fitness_list, key=lambda x:-x[1])
+    fitness_list = sorted(fitness_list, key=lambda x:x[1])
     
     # get the best 
-    best_fit = fitness_list[:20]
+    best_fit = fitness_list[:100]
     print("At this Iteration Following is the best grid")
     print(best_fit[0])
     best_member.append([grids[best_fit[0][0],:,:], best_fit[0][1]])
@@ -156,7 +156,7 @@ def genetic_algorithm(grids, start_exit_dict):
     #Got the pooled data
     best_grids = copy.deepcopy(A)
     offspring=np.empty((0,25,25), dtype=int)
-    for i,j in zip(range(10), range(10,20)):
+    for i,j in zip(range(50), range(50,100)):
 #        for j in range(10,20):
         new_a,new_b=crossover(best_grids[i,:,:],best_grids[j,:,:])
 #        print(new_a.shape)
@@ -192,7 +192,7 @@ def genetic_algorithm(grids, start_exit_dict):
         gridsMinUp[i], startsListMin[i] = get_all_roads(grid, startList=startList)    
     
     #Replace new 20 members with lowest fit 20
-    worst_fit = fitness_list[80:]
+    worst_fit = fitness_list[0:]
     for i in range(len(gridsMinUp)) :
         grids[worst_fit[i][0]] =  gridsMinUp[i]
         start_exit_dict[worst_fit[i][0]] = startsListMin[i]
@@ -201,9 +201,9 @@ def genetic_algorithm(grids, start_exit_dict):
     
     
 #Initial pops
+#grids , start_exit_dict = get_init_population(25,25)
 grids=np.load("populationGrids.npy")
 start_exit_dict = np.load("startsList.npy")
-#grids , start_exit_dict = get_init_population(25,25)
 #Lay roads on initial population
 for i in range(grids.shape[0]):
     grid=grids[i,:,:]
@@ -213,16 +213,16 @@ for i in range(grids.shape[0]):
 #print(start_exit_dict)
 # call genetic algorithm
 best_member= []
-for i in range(6):
+for i in range(50):
     print("Running Iteration : ", i+1)
     grids, start_exit_dict = genetic_algorithm(grids, start_exit_dict)
 fitness_list = []
 for i in range(grids.shape[0]):
     grid=grids[i,:,:]
     startList = start_exit_dict[i]
-    fitness_list.append((i, calculate_fitness(grid, startList)))
+    fitness_list.append((i, 1/calculate_fitness(grid, startList)))
 
-fitness_list = sorted(fitness_list, key=lambda x:-x[1])
+fitness_list = sorted(fitness_list, key=lambda x:x[1])
 
 # get the best 
 print("After End of All iterations Following is the best grid")
@@ -231,3 +231,5 @@ print(best_fit)
 best_member.append([grids[best_fit[0],:,:], best_fit[1]])
 fig,axis = pyplot.subplots()
 axis.matshow(grids[best_fit[0]], cmap=pyplot.cm.tab10)
+#fig2 = pyplot.plot([i[1] for i in best_member])
+np.save("resultsList", best_member)

@@ -125,57 +125,62 @@ input : member - (grid) - single member of population
         startList - the list of all startpoints of the buildings
 
 output: grid - updated grid with all the roads to the buildings
-        start_exit_dict - dictionary having all the starting points and corrosponding exit points of buildings.
+        start_exit_dict - dictionary having all the starting points and corrosponding exit points of buildings for one building.
 """
 def get_all_roads(member, startList):
     start_exit_dict = {}
     global grid
     grid = member
     #show initial grid without roads
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     # Build roads to houses
     start_exit_dict['houses'] = build_road_to_building(sorted(startList['houses'], key=lambda x: (-x[0], x[1])), size=2)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to coffice
     start_exit_dict['coffice'] = build_road_to_building(sorted(startList['coffice'], key=lambda x: (-x[0], x[1])), size=2)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to clubhouse
     start_exit_dict['club'] = build_road_to_building(sorted(startList['club'], key=lambda x: (-x[0], x[1])), size=4)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to playground
     start_exit_dict['play'] = build_road_to_building(sorted(startList['play'], key=lambda x: (-x[0], x[1])), size=4)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to clinic
     start_exit_dict['clinic'] = build_road_to_building(sorted(startList['clinic'], key=lambda x: (-x[0], x[1])), size=4)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to school
     start_exit_dict['school'] = build_road_to_building(sorted(startList['school'], key=lambda x: (-x[0], x[1])), size=5)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)
     
     # Build roads to market
     start_exit_dict['market'] = build_road_to_building(sorted(startList['market'], key=lambda x: (-x[0], x[1])), size=5)
-    fig,axis = pyplot.subplots()
-    axis.matshow(grid, cmap=pyplot.cm.tab10)        
+#    fig,axis = pyplot.subplots()
+#    axis.matshow(grid, cmap=pyplot.cm.tab10)        
     
     return grid, start_exit_dict
 
 #Uncomment below to test
-""""""
+"""
 X=np.load("populationGrids.npy")
-grid=X[50,:,:]
-startList = np.load("startsList.npy")
-startList = startList[50]
-grid, exit_dict = get_all_roads(grid, startList=startList)
-""""""
+start_exit_dict = np.load("startsList.npy")
+for i in range(X.shape[0]):
+    grid=X[i,:,:]
+    startList = start_exit_dict[i]
+    X[i,:,:], start_exit_dict[i] = get_all_roads(grid, startList=startList)
+print(X)
+print(start_exit_dict)
+np.save('populationGridsUpdt.npy', X)
+np.save('start_exit_dict.npy', start_exit_dict)
+"""

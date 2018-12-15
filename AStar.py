@@ -7,7 +7,7 @@ Created on Tue Dec 11 01:59:57 2018
 
 import numpy as np
 import matplotlib.pyplot as pyplot
-
+global way
 class Node:
     def __init__(self,value,point):
         self.value = value
@@ -22,6 +22,7 @@ class Node:
 def children(point,grid):
     x,y = point.point
     links=[]
+    global way
     if 0<x<24 and 0<y<24:
         links = [grid[d[0]][d[1]] for d in [(x-1, y),(x,y - 1),(x,y + 1),(x+1,y)] ]
     if x==0 and y==0:
@@ -41,11 +42,14 @@ def children(point,grid):
     if x==24 and y==0:
         links = [grid[d[0]][d[1]] for d in [(x - 1,y),(x,y + 1)] ]
     
-    return [link for link in links if link.value != '%' and (link.value=='0' or link.value=='2'or link.value=='7') ]
+    return [link for link in links if link.value != '%' and (link.value=='0' or link.value=='2'or link.value=='7') ] if way == 'any' else [link for link in links if link.value != '%' and (link.value=='0' or link.value=='7') ]
+
 def manhattan(point,point2):
     return abs(point.point[0] - point2.point[0]) + abs(point.point[1]-point2.point[0])
-def aStar(start, goal, grid):
+def aStar(start, goal, grid, fromWay = 'any'):
     #The open and closed sets
+    global way
+    way = fromWay
     openset = set()
     closedset = set()
     #Current point is the starting point
